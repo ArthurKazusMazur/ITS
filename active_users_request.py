@@ -1,14 +1,12 @@
-import requests
+from requests import get
+from pprint import pprint
 
+active_users = []
 
-url = 'https://gorest.co.in/public-api/users'
+for page in range(1, 11):
+    print(f'Страница {page} прочитана')
+    json_data = get(f'https://gorest.co.in/public-api/users?page={page}').json()
 
-for i in range(1, 11):
-    param = dict(page=i)
-    response = requests.get(url, params=param)
-    data = response.json()
-    i += 1
-    a = data['data']
-    print(a[0])
+    active_users.extend([user['name'] for user in json_data['data'] if user['status'] == 'Active'])
 
-
+pprint(active_users)
